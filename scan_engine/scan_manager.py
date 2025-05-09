@@ -1,5 +1,3 @@
-# File: scan_engine/scan_manager.py
-
 import csv
 import json
 import math
@@ -7,23 +5,28 @@ from utils.logger import get_logger
 
 
 class ScanManager:
-    """
-    Manages scanning operations for SPM.
-    """
-
     def __init__(self, motion_controller):
         """
-        Initialize the ScanManager with a motion controller.
-        :param motion_controller: Instance of MotionController.
+        Initialize the ScanManager with a MotionController instance.
+        :param motion_controller: An instance of MotionController to control the scan.
         """
         self.motion_controller = motion_controller
-        self.scan_data = []  # List to store scan data
+        self.is_scanning = False
         self.logger = get_logger(__name__)
+        self.scan_data = []
+
+    def start_scan(self):
+        """Start a scan."""
+        self.is_scanning = True
+        self.logger.info("Scan started.")
+
+    def stop_scan(self):
+        """Stop a scan."""
+        self.is_scanning = False
+        self.logger.info("Scan stopped.")
 
     def clear_scan_data(self):
-        """
-        Clear the scan data before starting a new scan.
-        """
+        """Clear the scan data before starting a new scan."""
         self.logger.debug("Clearing scan data.")
         self.scan_data = []
 
@@ -36,8 +39,6 @@ class ScanManager:
         """
         self.logger.info(f"Scanning position: ({x:.2f}, {y:.2f}, {z:.2f})")
         self.scan_data.append({"x": round(x, 2), "y": round(y, 2), "z": round(z, 2)})
-
-# File: scan_engine/scan_manager.py
 
     def raster_scan(self, x_start, x_end, y_start, y_end, step_size, progress_callback=None, data_logger=None):
         """
@@ -64,7 +65,6 @@ class ScanManager:
 
                 # Log data to the Data Logging Tab
                 if data_logger:
-                    # Call the data_logger function directly
                     data_logger(x, y, z)
 
                 # Update progress
@@ -171,5 +171,3 @@ class ScanManager:
                 )
 
         self.logger.info("Circular scan complete.")
-        
-        

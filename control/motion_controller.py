@@ -1,70 +1,59 @@
-# File: D:/Documents/Project/SPM/copilot/SPM-Software/control/motion_controller.py
-
 from hardware.stepper_motor import StepperMotor
 from hardware.mock_controller import MockController
 from utils.logger import get_logger
 
+logger = get_logger(__name__)
+
 class MotionController:
     def __init__(self):
-        self.logger = get_logger(__name__)
-        self.stepper_motor = StepperMotor()
-        self.mock_controller = MockController()
-        self.z_position = 0.0
-        self.setpoint = 0.0
-        self.kp = 1.0
-        self.ki = 0.0
-        self.kd = 0.0
-        self.previous_error = 0.0
-        self.integral = 0.0
-        self.logger.info("MotionController initialized.")
+        self.z_position = 0  # Initialize Z position
+        self.setpoint = 0    # Initialize setpoint for feedback control
+        self.kp = 0.0        # PID proportional gain
+        self.ki = 0.0        # PID integral gain
+        self.kd = 0.0        # PID derivative gain
 
     def move_z(self, position):
+        """Move the Z-axis to the specified position."""
         if not isinstance(position, (int, float)):
-            raise TypeError("Invalid Z position: Expected a numeric value.")
+            raise TypeError("Position must be a numeric value.")
         if position < 0 or position > 100:
-            raise ValueError("Z position out of range.")
+            raise ValueError("Position out of range (0 to 100).")
         self.z_position = position
-
-    def _fine_move(self, position):
-        self.stepper_motor.move_to(position)
-        self.logger.info(f"Fine movement completed. Z-axis at {self.stepper_motor.get_position()} µm")
-
-    def _coarse_move(self, position):
-        self.stepper_motor.move_to(position)
-        self.logger.info(f"Coarse movement completed. Z-axis at {self.stepper_motor.get_position()} µm")
+        logger.info(f"Z-axis moved to position {self.z_position}")
 
     def get_z_position(self):
-        self.z_position = self.mock_controller.get_position()
-        if isinstance(self.z_position, (int, float)):
-            return self.z_position
-        else:
-            self.logger.error("Invalid Z position: Expected a numeric value.")
+        """Get the current Z-axis position."""
+        if not isinstance(self.z_position, (int, float)):
             raise TypeError("Invalid Z position: Expected a numeric value.")
+        return self.z_position
 
     def feedback_control(self):
-        error = self.setpoint - self.get_z_position()
-        proportional = self.kp * error
-        self.integral += error
-        integral = self.ki * self.integral
-        derivative = self.kd * (error - self.previous_error)
-        output = proportional + integral + derivative
-        self.move_z(self.z_position + output, fine_control=True)
-        self.previous_error = error
-        self.logger.info(f"Feedback control: Setpoint={self.setpoint}, Current={self.z_position}, Error={error}")
+        """Perform feedback control to adjust the Z-axis."""
+        try:
+            error = self.setpoint - self.get_z_position()
+            logger.info(f"Feedback control error: {error}")
+            # Adjust Z position based on error (simple proportional control for now)
+            self.z_position += self.kp * error
+            logger.info(f"Z-axis adjusted to position {self.z_position}")
+        except Exception as e:
+            logger.error(f"Feedback control failed: {e}")
+            raise RuntimeError(f"Feedback control failed: {e}")
 
     def set_pid_parameters(self, kp, ki, kd):
+        """Set PID parameters for feedback control."""
+        if not all(isinstance(param, (int, float)) for param in [kp, ki, kd]):
+            raise TypeError("PID parameters must be numeric values.")
         self.kp = kp
         self.ki = ki
         self.kd = kd
-        self.logger.info(f"PID parameters updated: Kp={kp}, Ki={ki}, Kd={kd}")
+        logger.info(f"PID parameters set: kp={self.kp}, ki={self.ki}, kd={self.kd}")
 
     def emergency_retract(self):
-        safe_position = 0.0
-        self.move_z(safe_position, fine_control=False)
-        self.logger.info("Emergency retract completed. Z-axis moved to safe position.")
-
-    def reset(self):
-        self.z_position = 0.0
-        self.previous_error = 0.0
-        self.integral = 0.0
-        self.logger.info("MotionController reset to initial state.")
+        """Retract the Z-axis to a safe position."""
+        safe_position = 0
+        try:
+            self.move_z(safe_position)
+            logger.info("Emergency retract successful.")
+        except Exception as e:
+            logger.error(f"Emergency retract failed: {e}")
+            raise RuntimeError(f"Emergency retract failed: {e}")

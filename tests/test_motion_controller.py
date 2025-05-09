@@ -68,14 +68,18 @@ class TestMotionController(unittest.TestCase):
             self.fail(f"set_pid_parameters test raised an exception: {e}")
 
     def test_move_z_valid(self):
+        logger.info("Testing move_z_valid...")
         self.motion_controller.move_z(50.0)
         self.assertEqual(self.motion_controller.get_z_position(), 50.0)
+        logger.info("move_z_valid test passed.")
     
     def test_move_z_invalid(self):
-        with self.assertRaises(ValueError):
+        logger.info("Testing move_z_invalid...")
+        with self.assertRaises(TypeError):
             self.motion_controller.move_z("invalid")  # Invalid input
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             self.motion_controller.move_z(None)  # Invalid input
+        logger.info("move_z_invalid test passed.")
 
 
 if __name__ == "__main__":
