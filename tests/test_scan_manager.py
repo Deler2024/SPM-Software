@@ -12,16 +12,12 @@ if project_root not in sys.path:
 import unittest
 from scan_engine.scan_manager import ScanManager  # Ensure this import is correct
 
-class TestScanManager(unittest.TestCase):
-    """
-    Unit tests for the ScanManager class.
-    """
+from control.motion_controller import MotionController
 
+class TestScanManager(unittest.TestCase):
     def setUp(self):
-        """
-        Set up the test environment by initializing a ScanManager instance.
-        """
-        self.scan_manager = ScanManager()
+        self.motion_controller = MotionController()
+        self.scan_manager = ScanManager(motion_controller=self.motion_controller)
 
     def test_start_scan(self):
         """

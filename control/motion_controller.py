@@ -18,16 +18,11 @@ class MotionController:
         self.integral = 0.0
         self.logger.info("MotionController initialized.")
 
-    def move_z(self, position, fine_control=False):
+    def move_z(self, position):
+        if not isinstance(position, (int, float)):
+            raise TypeError("Invalid Z position: Expected a numeric value.")
         if position < 0 or position > 100:
-            self.logger.error(f"Z position {position} out of range.")
             raise ValueError("Z position out of range.")
-        if fine_control:
-            self.logger.info(f"Using fine control to move Z-axis to {position} µm")
-            self._fine_move(position)
-        else:
-            self.logger.info(f"Using coarse control to move Z-axis to {position} µm")
-            self._coarse_move(position)
         self.z_position = position
 
     def _fine_move(self, position):
