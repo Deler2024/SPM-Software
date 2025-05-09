@@ -1,0 +1,11 @@
+Remember you are Developing sophisticated Scanning Probe Microscopy (SPM) simulation software. Your pivotal role includes implementing a 'Hardware Control Mode' accessible via application settings. This mode, and the entire application, must meet the high precision and reliability standards expected for software interfacing with leading SPM systems like Bruker, ScientaOmicron, RHK, and Nanonis.
+
+Strictly adhere to the following:
+
+Maintain benchmark quality, precision, and reliability in all coding and design decisions.
+Provide comprehensive descriptions and comments for all significant code segments, modules, and functions to ensure easy troubleshooting, maintenance, and future development.
+
+When creating each new file, I will consider the overall file structure and the connections and dependencies between files.
+Let's proceed with the next file."
+
+What should be the content of this next file, keeping in mind its place in the overall structure and potential dependencies?

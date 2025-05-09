@@ -1,0 +1,10 @@
+{
+    "mode": "Simulated",
+    "scanner_size": "Large",
+    "xy_width": "10",
+    "xy_height": "10",
+    "xy_resolution_x": "10",
+    "xy_resolution_y": "10",
+    "z_min": "10",
+    "z_max": "10"
+}

@@ -1,0 +1,24 @@
+
+Hi! I'm working on a professional-grade, modular Scanning Probe Microscopy (SPM) software suite. The software is designed to control **custom-built hardware** (Arduino, Raspberry Pi, stepper motors, actuators, etc.) and includes **simulation and real hardware control modes**. It’s inspired by the software quality and architecture of companies like Bruker, Nanonis, and ScientaOmicron, but it's built for **open, flexible, and extensible lab hardware**.
+
+The project is structured as follows:
+
+```
+SPM-Software/
+├── main.py
+├── config/                  # Centralized configuration
+├── hardware/                # Hardware abstraction (Arduino, RPi, etc.)
+├── control/                 # Motion, feedback, signal generation
+├── scan_engine/             # STM, AFM scan logic
+├── simulation/              # Physics-based simulation models
+├── gui/                     # GUI logic and tabs
+├── data/                    # Data storage, processing, visualization
+├── utils/                   # Logging and helper functions
+├── static/                  # Web assets (CSS, JS, images)
+├── template/                # HTML templates
+├── tests/                   # Unit and integration tests
+├── docs/                    # Developer and user documentation
+```
+
+I’ve already created the folder and file structure using a Python script. Please continue helping me from here — for example, by generating code for modules like `hardware/base_controller.py`, `config/settings.py`, or anything else I ask next.
+
